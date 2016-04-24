@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.csc.lesson8">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="com.csc.shmakov.weatherapp.ui.MainActivity"
             android:label="@string/title_activity_main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,6 +19,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name="com.csc.shmakov.weatherapp.services.WeatherApiService"
+            android:exported="false"/>
+
+        <provider
+            android:name="com.csc.shmakov.weatherapp.storage.WeatherContentProvider"
+            android:authorities="com.csc.shmakov.weatherapp"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name="com.csc.shmakov.weatherapp.services.ForecastFetchRepeater$AlarmReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

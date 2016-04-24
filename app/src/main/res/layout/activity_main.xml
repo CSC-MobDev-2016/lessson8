@@ -5,16 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.csc.lesson8.MainActivity">
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="add"
-        android:text="add new fragment" />
+    tools:context="com.csc.shmakov.weatherapp.ui.MainActivity">
 
     <FrameLayout
-        android:id="@+id/fragment_main_container"
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
