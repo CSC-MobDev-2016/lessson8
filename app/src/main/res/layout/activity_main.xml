@@ -10,8 +10,8 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="add"
-        android:text="add new fragment" />
+        android:onClick="addCity"
+        android:text="Add city" />
 
     <FrameLayout
         android:id="@+id/fragment_main_container"

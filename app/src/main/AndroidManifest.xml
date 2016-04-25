@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.csc.lesson8">
+    package="com.csc.weatherapp">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -17,6 +21,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".DescriptionCityActivity"
+            android:label="@string/app_name" />
+
+        <provider
+            android:name=".ReaderContentProvider"
+            android:authorities="com.csc.weatherapp"
+            android:enabled="true"
+            android:exported="true" />
+
+        <receiver
+            android:name=".TimeNotification"
+            android:enabled="true"
+            android:exported="true"></receiver>
     </application>
 
 </manifest>
