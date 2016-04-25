@@ -50,10 +50,31 @@ public class WeatherFragment extends Fragment {
         return masterFragment;
     }
 
+    public void setData() {
+        city.setText(favCity.name);
+        weather.setText(favCity.weather);
+        description.setText(favCity.description);
+        humidity.setText(favCity.humidity);
+        pressure.setText(favCity.pressure);
+        wind.setText(favCity.wind);
+    }
+    public void onDataUpd() {
+        Cursor cursor = getActivity().getContentResolver().query(ENTRIES_URI, null, "city = ?",
+                new String[] {favCity.name}, null);
+        cursor.moveToNext();
+        favCity = City.fromCursor(cursor);
+        setData();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        if (favCity == null){
+            Cursor cursor = getActivity().getContentResolver().query(ENTRIES_URI, null, "city = ?",
+                    new String[] {new CityPreference(getActivity()).getCity()}, null);
+            cursor.moveToNext();
+            favCity = City.fromCursor(cursor);
+        }
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         city = (TextView)view.findViewById(R.id.favCityView);
         weather = (TextView)view.findViewById(R.id.favTempView);
@@ -63,14 +84,12 @@ public class WeatherFragment extends Fragment {
         wind = (TextView)view.findViewById(R.id.favWindView);
         icon = (ImageView)view.findViewById(R.id.star);
 
-
         city.setText(favCity.name);
         weather.setText(favCity.weather);
         description.setText(favCity.description);
         humidity.setText(favCity.humidity);
         pressure.setText(favCity.pressure);
         wind.setText(favCity.wind);
-
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 

@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
@@ -22,8 +23,9 @@
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:layout_gravity="center_horizontal"
-            android:paddingLeft="20dp" android:paddingRight="15dp">
+            android:layout_height="match_parent" android:layout_gravity="center_horizontal"
+            android:paddingLeft="20dp" android:paddingRight="15dp"
+            android:id="@+id/ll">
         <RelativeLayout
                 android:layout_width="0dip"
                 android:layout_height="fill_parent"
@@ -69,5 +71,18 @@
                     android:id="@+id/favDescView"/>
             </LinearLayout>
         </RelativeLayout>
+        <android.support.design.widget.FloatingActionButton
+                app:layout_behavior="com.csc.simple_weather.ScrollAwareFABBehavior"
+                android:id="@+id/button1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:onClick="addData"
+                android:src="@drawable/sync"
+                android:layout_gravity="bottom|right"
+                android:layout_marginBottom="16dp"
+                android:layout_marginRight="16dp"/>
     </LinearLayout>
+
+
 </LinearLayout>

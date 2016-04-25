@@ -69,7 +69,9 @@ public class MainActivity extends AppCompatActivity implements ListFragment.OnCi
     public void addData(View view) {
         ((ListFragment)((ViewPagerAdapter)viewPager.getAdapter()).getItem(1)).addData(view);
     }
-
+    public void updData(View view) {
+        ((WeatherFragment)((ViewPagerAdapter)viewPager.getAdapter()).getItem(0)).onDataUpd();
+    }
     private void addNewFragment() {
         getSupportFragmentManager()
                 .beginTransaction()
