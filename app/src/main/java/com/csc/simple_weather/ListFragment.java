@@ -1,5 +1,6 @@
 package com.csc.simple_weather;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -21,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.concurrent.TimeUnit;
@@ -33,6 +35,7 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
     public static final String EXTRA_TITLE = "extra_title";
     private MyListCursorAdapter adapter;
     private RecyclerView recyclerView;
+    OnCitySelectedListener mListener;
 
     private final ContentObserver observer = new ContentObserver(new Handler()) {
         @Override
@@ -49,21 +52,36 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
         return masterFragment;
     }
 
+    public interface OnCitySelectedListener {
+        public void onCitySelected(String city);
+    }
+
     public ListFragment() {
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (OnCitySelectedListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement OnArticleSelectedListener");
+        }
+    }
+    public void onListItemClick(View v, int position) {
+        LinearLayout l = (LinearLayout) v;
+        String cityName = ((TextView)v.findViewById(R.id.cityView)).getText().toString();
+        mListener.onCitySelected(cityName);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
     }
 
     @Override
@@ -81,6 +99,7 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
+                        onListItemClick(view, position);
                     }
                 })
         );
@@ -105,7 +124,6 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
             public void onClick(DialogInterface dialog, int which) {
                 try {
                     RemoteFetch.updateWeatherData(getActivity(), editText.getText().toString());
-                    getActivity().getSupportLoaderManager().getLoader(0).forceLoad();
                 } catch (Exception e) {
                     dialog.dismiss();
                     final AlertDialog alert;
@@ -115,6 +133,7 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
                     alert.setTitle("City" + editText.getText().toString() + " not found");
                     editText.setText("");
                 }
+                getActivity().getSupportLoaderManager().getLoader(0).forceLoad();
             }});
         dialog.setButton(DialogInterface.BUTTON_NEGATIVE,"Cancel", new DialogInterface.OnClickListener() {
             @Override

@@ -30,7 +30,7 @@ public class MyListCursorAdapter extends CursorRecyclerViewAdapter<MyListCursorA
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Cursor cursor) {
         City city = City.fromCursor(cursor);
-
+        viewHolder.item = city;
         viewHolder.city.setText(city.name);
         viewHolder.weather.setText(city.weather);
         viewHolder.weather.setTag(city.description);
@@ -43,6 +43,7 @@ public class MyListCursorAdapter extends CursorRecyclerViewAdapter<MyListCursorA
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
+        City item;
         TextView city;
         TextView weather;
         ImageView icon;
@@ -63,7 +64,9 @@ public class MyListCursorAdapter extends CursorRecyclerViewAdapter<MyListCursorA
             menu.getItem(0).setOnMenuItemClickListener(onFav);
             menu.getItem(1).setOnMenuItemClickListener(onFileDelete);
         }
-
+        public City getItem() {
+            return item;
+        }
 
         private final MenuItem.OnMenuItemClickListener onFav = new MenuItem.OnMenuItemClickListener() {
             @Override

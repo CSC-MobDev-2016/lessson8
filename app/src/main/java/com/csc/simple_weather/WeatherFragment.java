@@ -1,5 +1,6 @@
 package com.csc.simple_weather;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -29,12 +30,24 @@ public class WeatherFragment extends Fragment {
     TextView wind;
     ImageView icon;
     Typeface weatherFont;
+    City favCity;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         weatherFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/weather.ttf");
         RemoteFetch.updateWeatherData(getActivity(), new CityPreference(getActivity()).getCity());
+    }
+
+    public static WeatherFragment newInstance(String city, Context context) {
+        WeatherFragment masterFragment = new WeatherFragment();
+        RemoteFetch.updateWeatherData(context, city);
+        Cursor cursor = context.getContentResolver().query(ENTRIES_URI, null, "city = ?",
+                new String[] {city}, null);
+        cursor.moveToNext();
+        masterFragment.favCity = City.fromCursor(cursor);
+
+        return masterFragment;
     }
 
     @Nullable
@@ -50,11 +63,7 @@ public class WeatherFragment extends Fragment {
         wind = (TextView)view.findViewById(R.id.favWindView);
         icon = (ImageView)view.findViewById(R.id.star);
 
-        RemoteFetch.updateWeatherData(getActivity(), new CityPreference(getActivity()).getCity());
-        Cursor cursor = getActivity().getContentResolver().query(ENTRIES_URI, null, "city = ?",
-                new String[] {new CityPreference(getActivity()).getCity()}, null);
-        cursor.moveToNext();
-        City favCity = City.fromCursor(cursor);
+
         city.setText(favCity.name);
         weather.setText(favCity.weather);
         description.setText(favCity.description);

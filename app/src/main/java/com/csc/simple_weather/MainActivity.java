@@ -19,14 +19,18 @@ import android.view.View;
 import android.widget.EditText;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ListFragment.OnCitySelectedListener {
     private int counter = 0;
+    private int hour = 60 * 60 * 1000;
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    AlarmManager manager;
+    public static final String CITY_UPD = "CITY_UPD";
     public static final Uri ENTRIES_URI = Uri.withAppendedPath(ReaderContentProvider.CONTENT_URI, "entries");
 
     @Override
@@ -45,12 +49,19 @@ public class MainActivity extends AppCompatActivity {
         //if (savedInstanceState == null) {
         //    addNewFragment();
         //}
+        update();
+    }
+
+    @Override
+    public void onCitySelected(String city) {
+        ((ViewPagerAdapter)viewPager.getAdapter()).setItem
+                (WeatherFragment.newInstance(city, this), 0);
     }
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new WeatherFragment(), "WEATHER");
-        adapter.addFragment(new ListFragment(), "LIST");
+        adapter.addFragment(WeatherFragment.newInstance(new CityPreference(this).getCity(), this), "FORECAST");
+        adapter.addFragment(ListFragment.newInstance("Cities"), "CITIES");
         viewPager.setAdapter(adapter);
     }
     public void addData(View view) {
@@ -92,5 +103,19 @@ public class MainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
+        public void setItem(Fragment f, int pos) {
+            mFragmentList.set(pos, f);
+        }
+
+    }
+
+    private void update() {
+        Intent intent = new Intent(this, Updater.class);
+        intent.putExtra(CITY_UPD, "all");
+        manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        manager.cancel(pendingIntent);
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis() + hour,
+                hour, pendingIntent);
     }
 }

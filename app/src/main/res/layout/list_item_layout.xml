@@ -21,20 +21,18 @@
     <RelativeLayout
             android:layout_width="0dip"
             android:layout_height="fill_parent"
-            android:layout_weight="0.6">
-        <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:layout_gravity="center"
-                android:paddingLeft="5dp" android:paddingRight="10dp">
+            android:layout_weight="0.6"
+            android:id="@+id/rl">
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="Large Text"
-                    android:id="@+id/cityView" android:layout_gravity="left|center" android:paddingTop="5dp"
+                    android:id="@+id/cityView" android:layout_gravity="left|center"
+                    android:paddingTop="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="10dp"
                     android:textSize="20dp"/>
-        </LinearLayout>
     </RelativeLayout>
     <RelativeLayout
             android:layout_width="0dip"

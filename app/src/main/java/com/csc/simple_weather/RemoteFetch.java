@@ -64,8 +64,8 @@ public class RemoteFetch {
             String upd = df.format(new Date(json.getLong("dt") * 1000));
 
             return new City(json.getString("name"), details.getString("description"),
-                    String.format("%.0f", main.getDouble("temp")) + " ℃", main.getString("humidity"),
-                    main.getString("pressure"), wind.getString("speed"), upd);
+                    String.format("%.0f", main.getDouble("temp"))+" ℃", "Humidity: " + main.getString("humidity") + "%",
+                    "Pressure: " + main.getString("pressure") + "hPa", "Wind: " + wind.getString("speed") + "m/s", upd);
 
 
         } catch (Exception e) {
