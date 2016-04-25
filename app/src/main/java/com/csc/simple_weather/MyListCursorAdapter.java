@@ -33,7 +33,7 @@ public class MyListCursorAdapter extends CursorRecyclerViewAdapter<MyListCursorA
 
         viewHolder.city.setText(city.name);
         viewHolder.weather.setText(city.weather);
-        viewHolder.description.setText(city.description);
+        viewHolder.weather.setTag(city.description);
         viewHolder.city.setText(city.name);
         if (city.description.equals("sunny")) {
             viewHolder.icon.setImageResource(R.drawable.star);
@@ -45,7 +45,6 @@ public class MyListCursorAdapter extends CursorRecyclerViewAdapter<MyListCursorA
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         TextView city;
         TextView weather;
-        TextView description;
         ImageView icon;
 
         ViewHolder(View itemView) {
@@ -69,29 +68,18 @@ public class MyListCursorAdapter extends CursorRecyclerViewAdapter<MyListCursorA
         private final MenuItem.OnMenuItemClickListener onFav = new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                final EditText editText = new EditText(context);
-                final AlertDialog dialog = new AlertDialog.Builder(activity).create();
-                dialog.setMessage("Enter new city");
-                dialog.setView(editText);
-                dialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity)
+                        .setMessage("Show on start screen?")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    RemoteFetch.renderWeather(editText.getText().toString());
-                                } catch (Exception e) {
-                                    dialog.dismiss();
-                                    final AlertDialog alert;
-
-                                    AlertDialog.Builder dialog2 = new AlertDialog.Builder(activity);
-                                    alert = dialog2.create();
-                                    alert.setTitle("City" + editText.getText().toString() + " not found");
-                                    editText.setText("");
-                                }
-                            }});
-                dialog.setButton(DialogInterface.BUTTON_NEGATIVE,"Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                CityPreference pref = new CityPreference(activity);
+                                pref.setCity(city.getText().toString());
+                            }})
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {}});
-                dialog.show();
+                            public void onClick(DialogInterface dialog, int id) {}});
+                builder.create().show();
                 return true;
             }
         };

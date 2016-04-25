@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -61,13 +62,7 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /*recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(getApplicationContext(), new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override public void onItemClick(View view, int position) {
-                        //onUpdate(view);
-                    }
-                })
-        );*/
+
 
     }
 
@@ -83,6 +78,12 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
         cursor.registerContentObserver(observer);
         //((TextView) view.findViewById(R.id.tv)).setText(getArguments().getString(EXTRA_TITLE));
         recyclerView.setAdapter(adapter);
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                    }
+                })
+        );
         getActivity().getSupportLoaderManager().initLoader(0, null, this);
 
         return view;
@@ -96,19 +97,29 @@ public class ListFragment extends Fragment implements LoaderManager.LoaderCallba
 
     public void addData(View view) {
         final EditText editText = new EditText(getActivity());
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                .setMessage("New city")
-                .setView(editText)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        RemoteFetch.updateWeatherData(getActivity(), editText.getText().toString());
-                        getActivity().getSupportLoaderManager().getLoader(0).forceLoad();
-                    }})
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {}});
-        builder.create().show();
+        final AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
+        dialog.setMessage("Enter new city");
+        dialog.setView(editText);
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    RemoteFetch.updateWeatherData(getActivity(), editText.getText().toString());
+                    getActivity().getSupportLoaderManager().getLoader(0).forceLoad();
+                } catch (Exception e) {
+                    dialog.dismiss();
+                    final AlertDialog alert;
+
+                    AlertDialog.Builder dialog2 = new AlertDialog.Builder(getActivity());
+                    alert = dialog2.create();
+                    alert.setTitle("City" + editText.getText().toString() + " not found");
+                    editText.setText("");
+                }
+            }});
+        dialog.setButton(DialogInterface.BUTTON_NEGATIVE,"Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {}});
+        dialog.show();
     }
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle bndl) {

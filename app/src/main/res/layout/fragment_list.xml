@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              xmlns:app="http://schemas.android.com/apk/res-auto">
+<android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -13,7 +15,7 @@
             android:focusableInTouchMode="true"/>
 
     <android.support.design.widget.FloatingActionButton
-            app:layout_behavior="com.csc.simple_todo_list.ScrollAwareFABBehavior"
+            app:layout_behavior="com.csc.simple_weather.ScrollAwareFABBehavior"
             android:id="@+id/button1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,4 +27,5 @@
             android:layout_marginRight="16dp"
             app:layout_anchor="@id/rv"
             app:layout_anchorGravity="bottom|right|end"/>
-</LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

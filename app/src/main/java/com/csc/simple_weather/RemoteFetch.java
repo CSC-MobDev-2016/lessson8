@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,7 +29,7 @@ public class RemoteFetch {
 
     public static JSONObject getJSON(String city){
         try {
-            URL url = new URL(String.format(OPEN_WEATHER_MAP_API, city));
+            URL url = new URL(String.format(OPEN_WEATHER_MAP_API, URLEncoder.encode(city)));
             HttpURLConnection connection = (HttpURLConnection)url.openConnection();
             connection.addRequestProperty("x-api-key",KEY);
 
@@ -58,12 +59,12 @@ public class RemoteFetch {
             JSONObject json = getJSON(city);
             JSONObject main = json.getJSONObject("main");
             JSONObject details = json.getJSONArray("weather").getJSONObject(0);
-            JSONObject wind = json.getJSONArray("wind").getJSONObject(0);
+            JSONObject wind = json.getJSONObject("wind");
             DateFormat df = DateFormat.getDateTimeInstance();
             String upd = df.format(new Date(json.getLong("dt") * 1000));
 
             return new City(json.getString("name"), details.getString("description"),
-                    String.format("%.2f", main.getDouble("temp")) + " ℃", main.getString("humidity"),
+                    String.format("%.0f", main.getDouble("temp")) + " ℃", main.getString("humidity"),
                     main.getString("pressure"), wind.getString("speed"), upd);
 
 
@@ -97,9 +98,12 @@ public class RemoteFetch {
                             values.put(COLUMN_PRESSURE, newCity.pressure);
                             values.put(COLUMN_WIND, newCity.wind);
                             values.put(COLUMN_LASTUPD, newCity.lastUpd);
-                            context.getContentResolver().update(ENTRIES_URI, values, null, null);
+                            context.getContentResolver().update(ENTRIES_URI, values,  "city = ?",
+                                    new String[] {params[0]});
                         }
                     } else {
+                        Cursor cursor = context.getContentResolver().query(ENTRIES_URI, null, "city = ?",
+                                new String[] {params[0]}, null);
                         City newCity = renderWeather(params[0]);
                         ContentValues values = new ContentValues();
                         values.put(COLUMN_WEATHER, newCity.weather);
@@ -109,9 +113,15 @@ public class RemoteFetch {
                         values.put(COLUMN_PRESSURE, newCity.pressure);
                         values.put(COLUMN_WIND, newCity.wind);
                         values.put(COLUMN_LASTUPD, newCity.lastUpd);
-                        context.getContentResolver().insert(ENTRIES_URI, values);
+                        if (cursor.getCount() == 0) {
+                            context.getContentResolver().insert(ENTRIES_URI, values);
+                        } else {
+                            context.getContentResolver().update(ENTRIES_URI, values,  "city = ?",
+                                    new String[] {params[0]});
+                        }
                     }
                 } catch (Exception e) {
+
                 }
                 return null;
             }

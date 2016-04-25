@@ -9,7 +9,7 @@
     <RelativeLayout
             android:layout_width="0dip"
             android:layout_height="fill_parent"
-            android:layout_weight="0.1">
+            android:layout_weight="0.2">
         <ImageView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
@@ -21,7 +21,7 @@
     <RelativeLayout
             android:layout_width="0dip"
             android:layout_height="fill_parent"
-            android:layout_weight="0.8">
+            android:layout_weight="0.6">
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
@@ -39,7 +39,7 @@
     <RelativeLayout
             android:layout_width="0dip"
             android:layout_height="fill_parent"
-            android:layout_weight="0.1">
+            android:layout_weight="0.2">
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

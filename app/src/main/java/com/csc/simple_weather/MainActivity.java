@@ -1,6 +1,10 @@
 package com.csc.simple_weather;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -29,9 +33,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
@@ -42,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         //    addNewFragment();
         //}
     }
+
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new WeatherFragment(), "WEATHER");
@@ -49,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
     public void addData(View view) {
-        ((ListFragment)((ViewPagerAdapter)viewPager.getAdapter()).getFragment(1)).addData(view);
+        ((ListFragment)((ViewPagerAdapter)viewPager.getAdapter()).getItem(1)).addData(view);
     }
 
     private void addNewFragment() {
@@ -86,9 +91,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
-        }
-        public Fragment getFragment(int pos) {
-            return mFragmentList.get(pos);
         }
     }
 }

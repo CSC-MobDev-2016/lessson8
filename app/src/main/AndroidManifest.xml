@@ -17,6 +17,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider
+                android:name="com.csc.simple_weather.ReaderContentProvider"
+                android:authorities="com.csc.simple_weather"
+                android:enabled="true"
+                android:exported="true"></provider>
     </application>
 
 </manifest>
