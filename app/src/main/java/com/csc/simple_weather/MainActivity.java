@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements ListFragment.OnCi
     public void onCitySelected(String city) {
         ((ViewPagerAdapter)viewPager.getAdapter()).setItem
                 (WeatherFragment.newInstance(city, this), 0);
+        viewPager.setCurrentItem(0);
+
     }
 
     private void setupViewPager(ViewPager viewPager) {
