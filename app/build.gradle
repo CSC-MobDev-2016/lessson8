@@ -1,11 +1,12 @@
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "com.csc.lesson8"
+        applicationId "ru.csc.android_course.qurbonzoda.weather"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
@@ -17,11 +18,22 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
     //    compile 'com.android.support:design:23.3.0'
-    compile 'com.android.support:appcompat-v7:23.3.0'
-    compile 'com.android.support:support-v4:23.3.0'
-    compile 'com.android.support:design:23.3.0'
+    compile 'com.android.support:appcompat-v7:23.2.1'
+    compile 'com.android.support:support-v4:23.2.1'
+    compile 'com.android.support:design:23.2.1'
+
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+
+    compile 'io.reactivex:rxjava:1.1.1'
+    compile 'io.reactivex:rxandroid:1.1.0'
 }
