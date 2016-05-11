@@ -35,7 +35,7 @@ public class WeatherFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        weatherFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/weather.ttf");
+        //weatherFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/weather.ttf");
         RemoteFetch.updateWeatherData(getActivity(), new CityPreference(getActivity()).getCity());
     }
 
@@ -50,7 +50,11 @@ public class WeatherFragment extends Fragment {
         return masterFragment;
     }
 
-    public void setData() {
+    public void onDataUpd(Context context) {
+        Cursor cursor = context.getContentResolver().query(ENTRIES_URI, null, "city = ?",
+                new String[] {favCity.name}, null);
+        cursor.moveToNext();
+        favCity = City.fromCursor(cursor);
         city.setText(favCity.name);
         weather.setText(favCity.weather);
         description.setText(favCity.description);
@@ -58,12 +62,17 @@ public class WeatherFragment extends Fragment {
         pressure.setText(favCity.pressure);
         wind.setText(favCity.wind);
     }
-    public void onDataUpd() {
-        Cursor cursor = getActivity().getContentResolver().query(ENTRIES_URI, null, "city = ?",
-                new String[] {favCity.name}, null);
+    public void onDataUpd(Context context, String cityName) {
+        Cursor cursor = context.getContentResolver().query(ENTRIES_URI, null, "city = ?",
+                new String[] {cityName}, null);
         cursor.moveToNext();
         favCity = City.fromCursor(cursor);
-        setData();
+        city.setText(favCity.name);
+        weather.setText(favCity.weather);
+        description.setText(favCity.description);
+        humidity.setText(favCity.humidity);
+        pressure.setText(favCity.pressure);
+        wind.setText(favCity.wind);
     }
 
     @Nullable
@@ -90,7 +99,7 @@ public class WeatherFragment extends Fragment {
         humidity.setText(favCity.humidity);
         pressure.setText(favCity.pressure);
         wind.setText(favCity.wind);
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return view;
     }
 
 

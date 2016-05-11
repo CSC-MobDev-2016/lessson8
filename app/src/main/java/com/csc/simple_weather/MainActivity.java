@@ -54,10 +54,10 @@ public class MainActivity extends AppCompatActivity implements ListFragment.OnCi
 
     @Override
     public void onCitySelected(String city) {
-        ((ViewPagerAdapter)viewPager.getAdapter()).setItem
-                (WeatherFragment.newInstance(city, this), 0);
-        viewPager.setCurrentItem(0);
 
+        ((WeatherFragment)((ViewPagerAdapter)viewPager.getAdapter()).getItem(0)).onDataUpd(this, city);
+        viewPager.getAdapter().notifyDataSetChanged();
+        viewPager.setCurrentItem(0);
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements ListFragment.OnCi
         ((ListFragment)((ViewPagerAdapter)viewPager.getAdapter()).getItem(1)).addData(view);
     }
     public void updData(View view) {
-        ((WeatherFragment)((ViewPagerAdapter)viewPager.getAdapter()).getItem(0)).onDataUpd();
+        ((WeatherFragment)((ViewPagerAdapter)viewPager.getAdapter()).getItem(0)).onDataUpd(this);
     }
     private void addNewFragment() {
         getSupportFragmentManager()

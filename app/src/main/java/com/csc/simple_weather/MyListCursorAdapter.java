@@ -35,7 +35,7 @@ public class MyListCursorAdapter extends CursorRecyclerViewAdapter<MyListCursorA
         viewHolder.weather.setText(city.weather);
         viewHolder.weather.setTag(city.description);
         viewHolder.city.setText(city.name);
-        if (city.description.contains("sun")) {
+        if (city.description.contains("clear")) {
             viewHolder.icon.setImageResource(R.drawable.sun);
         } else if (city.description.contains("cloud")) {
             viewHolder.icon.setImageResource(R.drawable.cloud);
